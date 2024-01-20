@@ -12,6 +12,7 @@ const App = () => {
   // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const positionAnim = useRef(new Animated.Value(0)).current;
+  const bouncePosition = useRef(new Animated.Value(800)).current;
 
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
@@ -49,6 +50,15 @@ const App = () => {
     }).start();
   };
 
+  const handleBounce = () => {
+    Animated.spring(bouncePosition, {
+      toValue: -100,
+      friction: 7, // determines the bounciness, less friction=more bounce. default value is 7
+      tension: 20, //determines the velocity. default value is 20
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Animated.View
@@ -66,9 +76,22 @@ const App = () => {
             ],
           },
         ]}></Animated.View>
+
+      <Animated.View
+        style={[
+          styles.circle,
+          {
+            transform: [
+              {
+                translateY: bouncePosition,
+              },
+            ],
+          },
+        ]}></Animated.View>
       <View style={styles.buttonRow}>
         <Button title="Fade In View" onPress={fadeIn} />
         <Button title="Fade Out View" onPress={fadeOut} />
+        <Button title="Bounce" onPress={handleBounce} />
       </View>
     </SafeAreaView>
   );
@@ -96,6 +119,12 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: 'red',
+  },
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'green',
   },
 });
 
